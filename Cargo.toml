@@ -28,7 +28,7 @@ alloy-primitives = { version = "0.8.4", default-features = false, features = [
 ] }
 
 # sp1
-sp1-sdk = "3.0.0"
+sp1-sdk = "4.0.1"
 
 # jsonrpc
 jsonrpc-core = "18.0.0"
