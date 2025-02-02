@@ -9,9 +9,21 @@ use sp1_sdk::{
 };
 use std::sync::Arc;
 use std::str::FromStr;
-use tokio::runtime::Runtime;
 
 use crate::{proof_db::ProofDB, types::{RequestResult, WitnessResult}, PROGRAM_KEY};
+
+pub fn block_on<T>(fut: impl std::future::Future<Output = T>) -> T {
+    use tokio::task::block_in_place;
+
+    // Handle case if we're already in an tokio runtime.
+    if let Ok(handle) = tokio::runtime::Handle::try_current() {
+        block_in_place(|| handle.block_on(fut))
+    } else {
+        // Otherwise create a new runtime.
+        let rt = tokio::runtime::Runtime::new().expect("Failed to create a new runtime");
+        rt.block_on(fut)
+    }
+}
 
 pub fn request_prove_to_sp1(client: &Arc<NetworkClient>, witness: String) -> Result<B256> {
     // Recover a SP1Stdin from the witness string.
@@ -20,8 +32,8 @@ pub fn request_prove_to_sp1(client: &Arc<NetworkClient>, witness: String) -> Res
 
     // Send a request to generate a proof to the sp1 network.
     tracing::debug!("ready to send request to SP1 network prover");
-    let rt = Runtime::new()?;
-    let response = rt.block_on(async move {
+    
+    let response = block_on(async move {
         let vk_hash = B256::from_str(&PROGRAM_KEY).unwrap();
         client
             .request_proof(
@@ -71,9 +83,8 @@ pub fn get_status_by_remote_id(
     proof_db: &Arc<ProofDB>,
     request_id: B256,
 ) -> RequestResult {
-    let rt = Runtime::new().unwrap();
     let (status, maybe_proof) =
-        match rt.block_on(async { client.get_proof_request_status(request_id, None).await }) {
+        match block_on(async { client.get_proof_request_status(request_id, None).await }) {
             Ok(res) => res,
             Err(_) => return RequestResult::None,
         };
