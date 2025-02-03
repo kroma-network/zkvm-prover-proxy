@@ -35,7 +35,7 @@ run-onchain-verify proof_data="proof.json":
 
     // Deploy the verifier contract.
     cd sp1-contracts/contracts
-    forge create --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 src/v3.0.0/SP1VerifierPlonk.sol:SP1Verifier
+    forge create --private-key 0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80 src/v4.0.0-rc.3/SP1VerifierPlonk.sol:SP1Verifier
     cd ../../
 
     program_key=$(jq -r '.program_key' {{proof_data}})
