@@ -31,7 +31,7 @@ pub trait Rpc {
 pub struct RpcImpl {
     task_lock: Arc<RwLock<()>>,
     proof_db: Arc<ProofDB>,
-    client: Arc<NetworkClient>,
+    pub client: Arc<NetworkClient>,
 }
 
 impl RpcImpl {
@@ -74,7 +74,7 @@ impl Rpc for RpcImpl {
             })?;
 
         // Check a status of the request.
-        let _guard = self.task_lock.write().unwrap();
+        let _guard = self.task_lock.write().unwrap();    
         let req_status = crate::utils::get_status_by_local_id(
             &self.client,
             &self.proof_db,

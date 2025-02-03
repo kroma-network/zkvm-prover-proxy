@@ -1,7 +1,7 @@
 use serde::{Deserialize, Serialize};
 use sp1_sdk::{SP1ProofWithPublicValues, SP1_CIRCUIT_VERSION as SP1_SDK_VERSION};
 
-use crate::{version::PROVER_PROXY_VERSION, PROGRAM_KEY};
+use crate::{version::PROVER_PROXY_VERSION, VERIFICATION_KEY_HASH};
 
 #[derive(Clone, Debug, Serialize, Deserialize)]
 pub struct SpecResult {
@@ -25,7 +25,7 @@ impl Default for SpecResult {
         SpecResult::new(
             PROVER_PROXY_VERSION.to_string(),
             SP1_SDK_VERSION.to_string(),
-            PROGRAM_KEY.to_string(),
+            VERIFICATION_KEY_HASH.to_string(),
         )
     }
 }
@@ -56,17 +56,21 @@ impl ProofResult {
         Self {
             request_id: request_id.to_string(),
             request_status,
-            program_key: PROGRAM_KEY.to_string(),
+            program_key: VERIFICATION_KEY_HASH.to_string(),
             public_values: hex::encode(&proof.public_values),
             proof: hex::encode(proof.bytes()),
         }
+    }
+
+    pub fn is_proof_included(&self) -> bool {
+        self.request_status == RequestResult::Completed
     }
 
     pub fn none() -> Self {
         Self {
             request_id: "".to_string(),
             request_status: RequestResult::None,
-            program_key: PROGRAM_KEY.to_string(),
+            program_key: VERIFICATION_KEY_HASH.to_string(),
             public_values: "".to_string(),
             proof: "".to_string(),
         }
@@ -76,7 +80,7 @@ impl ProofResult {
         Self {
             request_id,
             request_status: RequestResult::Processing,
-            program_key: PROGRAM_KEY.to_string(),
+            program_key: VERIFICATION_KEY_HASH.to_string(),
             public_values: "".to_string(),
             proof: "".to_string(),
         }
@@ -86,7 +90,7 @@ impl ProofResult {
         Self {
             request_id,
             request_status: RequestResult::Failed,
-            program_key: PROGRAM_KEY.to_string(),
+            program_key: VERIFICATION_KEY_HASH.to_string(),
             public_values: "".to_string(),
             proof: "".to_string(),
         }
@@ -113,7 +117,7 @@ impl WitnessResult {
     pub fn new<T: ToString>(status: RequestResult, witness: T) -> Self {
         Self {
             status,
-            program_key: PROGRAM_KEY.to_string(),
+            program_key: VERIFICATION_KEY_HASH.to_string(),
             witness: witness.to_string(),
         }
     }

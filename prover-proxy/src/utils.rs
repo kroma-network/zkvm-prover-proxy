@@ -8,9 +8,8 @@ use sp1_sdk::{
     SP1_CIRCUIT_VERSION as SP1_SDK_VERSION, {SP1ProofWithPublicValues, SP1Stdin},
 };
 use std::sync::Arc;
-use std::str::FromStr;
 
-use crate::{proof_db::ProofDB, types::{RequestResult, WitnessResult}, PROGRAM_KEY};
+use crate::{proof_db::ProofDB, types::{RequestResult, WitnessResult}, VERIFICATION_KEY_HASH};
 
 pub fn block_on<T>(fut: impl std::future::Future<Output = T>) -> T {
     use tokio::task::block_in_place;
@@ -34,10 +33,9 @@ pub fn request_prove_to_sp1(client: &Arc<NetworkClient>, witness: String) -> Res
     tracing::debug!("ready to send request to SP1 network prover");
     
     let response = block_on(async move {
-        let vk_hash = B256::from_str(&PROGRAM_KEY).unwrap();
         client
             .request_proof(
-                vk_hash,
+                *VERIFICATION_KEY_HASH,
                 &sp1_stdin,
                 ProofMode::Plonk,
                 SP1_SDK_VERSION,
