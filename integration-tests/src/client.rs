@@ -5,7 +5,7 @@ use jsonrpsee_core::{client::ClientT, rpc_params};
 
 use kroma_prover_proxy::{
     errors::ProverError,
-    types::{ProofResult, RequestResult as ProverRequest, SpecResult as ProverSpec, WitnessResult},
+    types::{ProofResult, RequestResult as ProverRequest, SpecResult as ProverSpec, WitnessResult}, FAULT_PROOF_ELF,
 };
 use std::time::Duration;
 
@@ -44,6 +44,23 @@ impl TestClient {
     pub async fn prover_spec(&self) -> ProverSpec {
         let params = rpc_params![];
         self.prover_client.request("spec", params).await.unwrap()
+    }
+
+    pub async fn execute_witness(&self, witness_result: &WitnessResult) -> bool {
+        let prover = sp1_sdk::ProverClient::from_env();
+        let mut sp1_stdin = sp1_sdk::SP1Stdin::new();
+        sp1_stdin.buffer = witness_result.get_witness_buf();
+
+        match prover.execute(FAULT_PROOF_ELF, &sp1_stdin).run() {
+            Ok(report) => {
+                println!("Execution report: {:?}", report);
+                true
+            }
+            Err(e) => {
+                println!("Failed to execute witness: {:?}", e);
+                false
+            }
+        }
     }
 
     pub async fn request_prove(

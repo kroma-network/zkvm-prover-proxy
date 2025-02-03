@@ -12,6 +12,7 @@ use serde::{Deserialize, Serialize};
 #[derive(Debug, Clone, clap::ValueEnum)]
 pub enum Method {
     Spec,
+    Execute,
     Request,
     Get,
     Scenario,

@@ -81,6 +81,12 @@ async fn main() -> Result<()> {
             let spec = client.prover_spec().await;
             println!("Prover-Proxy spec: {:#?}", spec);
         }
+        Method::Execute => {
+            args.assert_if_empty_hashes();
+            let witness_result = load_witness(&args.witness_data).expect("failed to load witness");
+            let result = client.execute_witness(&witness_result).await;
+            println!("Execution result: {:?}", result);
+        }
         Method::Request => {
             args.assert_if_empty_hashes();
             let witness_result = load_witness(&args.witness_data).expect("failed to load witness");
