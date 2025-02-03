@@ -9,7 +9,7 @@ use sp1_sdk::{
 };
 use std::sync::Arc;
 
-use crate::{proof_db::ProofDB, types::{RequestResult, WitnessResult}, VERIFICATION_KEY_HASH};
+use crate::{proof_db::ProofDB, types::{RequestResult, WitnessResult}, MAX_CYCLES, VERIFICATION_KEY_HASH};
 
 pub fn block_on<T>(fut: impl std::future::Future<Output = T>) -> T {
     use tokio::task::block_in_place;
@@ -41,7 +41,7 @@ pub fn request_prove_to_sp1(client: &Arc<NetworkClient>, witness: String) -> Res
                 SP1_SDK_VERSION,
                 sp1_sdk::network::FulfillmentStrategy::Hosted,
                 10,
-                500_000_000,
+                MAX_CYCLES,
             )
             .await
     })?;

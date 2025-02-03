@@ -24,3 +24,4 @@ pub static VERIFICATION_KEY_HASH: Lazy<B256> = Lazy::new(|| {
 // NOTE(Ethan): equals to `DEFAULT_NETWORK_RPC_URL`` in sp1/creates/sdk/src/network/mod.rs
 pub const DEFAULT_NETWORK_RPC_URL: &str = "https://rpc.production.succinct.xyz/";
 pub const DEFAULT_PROOF_STORE_PATH: &str = "data/proof_store";
+pub const MAX_CYCLES: u64 = 1_000_000_000;
