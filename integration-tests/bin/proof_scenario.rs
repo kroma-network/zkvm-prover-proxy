@@ -93,7 +93,9 @@ async fn main() -> Result<()> {
         Method::Get => {
             args.assert_if_empty_hashes();
             let proof_result = client.get_proof(args.l2_hash, args.l1_head_hash).await;
-            save_proof(&args.proof_data, &proof_result).expect("failed to save witness");
+            if proof_result.is_proof_included() {
+                save_proof(&args.proof_data, &proof_result).expect("failed to save witness");
+            }
             println!("Proof status: {:?}", proof_result.request_status);
         }
         Method::Scenario => {
