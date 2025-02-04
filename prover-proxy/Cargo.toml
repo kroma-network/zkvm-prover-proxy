@@ -1,8 +1,9 @@
 [package]
 name = "kroma-prover-proxy"
-version = "1.1.0"
-edition = "2021"
-authors = ["Ethan Yoo"]
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+authors.workspace = true
 
 [[bin]]
 name = "prover-proxy"
