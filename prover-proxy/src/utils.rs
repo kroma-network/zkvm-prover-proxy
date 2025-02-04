@@ -40,7 +40,7 @@ pub fn request_prove_to_sp1(client: &Arc<NetworkClient>, witness: String) -> Res
                 ProofMode::Plonk,
                 SP1_SDK_VERSION,
                 sp1_sdk::network::FulfillmentStrategy::Hosted,
-                10,
+                7200,
                 MAX_CYCLES,
             )
             .await

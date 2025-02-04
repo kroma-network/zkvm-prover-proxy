@@ -27,7 +27,7 @@ fn main() -> Result<()> {
     
     block_on(async {
         let vk_hash = rpc_impl.client.register_program(&VERIFYING_KEY, FAULT_PROOF_ELF).await.unwrap();
-        tracing::info!("“The program’s key was retrieved from the network.”: {:?}", vk_hash);
+        tracing::info!("The program’s key was retrieved from the network: {:?}", vk_hash);
     });
     
     let mut io = jsonrpc_core::IoHandler::new();
