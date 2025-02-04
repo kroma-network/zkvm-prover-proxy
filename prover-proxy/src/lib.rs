@@ -5,12 +5,17 @@ pub mod types;
 pub mod utils;
 pub mod version;
 
+use std::env;
+
 use alloy_primitives::{hex::FromHex, B256};
 use once_cell::sync::Lazy;
 use sp1_sdk::{HashableKey, ProverClient, SP1VerifyingKey};
 
 pub const FAULT_PROOF_ELF: &[u8] = include_bytes!("../../program/elf/fault-proof-elf");
 pub static VERIFYING_KEY: Lazy<SP1VerifyingKey> = Lazy::new(|| {
+    // NOTE(Ethan): this is code to prevent unnecessary logs from being printed.
+    env::set_var("SP1_PROVER", "cpu");
+    
     let prover = ProverClient::from_env();
     let (_, vkey) = prover.setup(FAULT_PROOF_ELF);
     vkey

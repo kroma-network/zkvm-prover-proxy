@@ -60,8 +60,14 @@ pub fn get_status_by_local_id(
 ) -> RequestResult {
     let request_id = proof_db.get_request_id(l2_hash, l1_head_hash);
     match request_id {
-        Some(id) => get_status_by_remote_id(client, proof_db, id),
-        None => RequestResult::None,
+        Some(id) => {
+            tracing::info!("Load request id from db: {:?}", request_id);
+            get_status_by_remote_id(client, proof_db, id)
+        }
+        None => {
+            tracing::info!("There is no request id found for the given hashes");
+            RequestResult::None
+        }
     }
 }
 
@@ -87,6 +93,7 @@ pub fn get_status_by_remote_id(
             Err(_) => return RequestResult::None,
         };
 
+    tracing::info!("Fetched proof request status: {:?}", status);
     match status_from_i32(status.fulfillment_status).unwrap() {
         FulfillmentStatus::Fulfilled => {
             proof_db.set_proof(&request_id, &maybe_proof.unwrap()).unwrap();
