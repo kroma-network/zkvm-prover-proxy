@@ -1,0 +1,41 @@
+[package]
+name = "kroma-prover-proxy"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "prover-proxy"
+path = "bin/prover_proxy.rs"
+
+[dependencies]
+anyhow.workspace = true
+bincode.workspace = true
+clap.workspace = true
+dotenv.workspace = true
+hex.workspace = true
+once_cell.workspace = true
+serde.workspace = true
+tokio.workspace = true
+tracing.workspace = true
+tracing-subscriber.workspace = true
+
+# alloy
+alloy-primitives.workspace = true
+
+# sp1
+sp1-sdk.workspace = true
+
+# jsonrpc
+jsonrpc-core.workspace = true
+jsonrpc-core-client.workspace = true
+jsonrpc-derive.workspace = true
+jsonrpc-http-server.workspace = true
+
+## jsonrpc client
+jsonrpsee-core.workspace = true
+jsonrpsee.workspace = true
+
+# kroma
+kroma-zkvm-common.workspace = true

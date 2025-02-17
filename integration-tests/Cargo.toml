@@ -1,0 +1,24 @@
+[package]
+name = "integration-tests"
+version.workspace = true
+license.workspace = true
+edition.workspace = true
+authors.workspace = true
+
+[[bin]]
+name = "proof-scenario"
+path = "bin/proof_scenario.rs"
+
+[dependencies]
+anyhow.workspace = true
+clap.workspace = true
+jsonrpsee-core.workspace = true
+jsonrpsee.workspace = true
+tokio.workspace = true
+serde_json.workspace = true
+serde.workspace = true
+
+alloy-primitives.workspace = true
+kroma-prover-proxy.workspace = true
+
+sp1-sdk.workspace = true
