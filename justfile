@@ -19,6 +19,9 @@ run-proof-scenario l2_hash l1_head_hash proof_store="/tmp/proof_store" witness_d
 
     trap "kill $prover_pid; rm -rf {{proof_store}};" EXIT QUIT INT
 
+    # Wait for the prover to start.
+    sleep 10
+
     # Do test
     cargo run --bin proof-scenario --release -- \
     --l2-hash {{l2_hash}} \

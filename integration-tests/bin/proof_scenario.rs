@@ -7,10 +7,10 @@ use std::{thread::sleep, time::Duration};
 #[derive(Parser, Debug)]
 #[clap(author, version, about, long_about = None)]
 struct Args {
-    #[clap(short, long, default_value_t = B256::default())]
+    #[clap(long, default_value_t = B256::default())]
     l2_hash: B256,
 
-    #[clap(short, long, default_value_t = B256::default())]
+    #[clap(long, default_value_t = B256::default())]
     l1_head_hash: B256,
 
     #[clap(short, long, default_value = "./witness.json")]
