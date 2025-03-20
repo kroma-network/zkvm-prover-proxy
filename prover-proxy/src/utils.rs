@@ -7,7 +7,7 @@ use sp1_sdk::{
     },
     SP1_CIRCUIT_VERSION as SP1_SDK_VERSION, {SP1ProofWithPublicValues, SP1Stdin},
 };
-use std::sync::Arc;
+use std::{fs::File, sync::Arc};
 
 use crate::{proof_db::ProofDB, types::{RequestResult, WitnessResult}, MAX_CYCLES, VERIFICATION_KEY_HASH};
 
@@ -118,4 +118,12 @@ pub fn get_proof_by_local_id(
         Some(id) => proof_db.get_proof_by_id(&id),
         None => None,
     }
+}
+
+pub fn load_witness(witness_data: &String) -> Result<WitnessResult> {
+    let file = File::open(witness_data)?;
+    let reader = std::io::BufReader::new(file);
+    let witness_result = serde_json::from_reader(reader)?;
+
+    Ok(witness_result)
 }
