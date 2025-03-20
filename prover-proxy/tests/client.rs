@@ -5,7 +5,8 @@ use jsonrpsee_core::{client::ClientT, rpc_params};
 
 use kroma_prover_proxy::{
     errors::ProverError,
-    types::{ProofResult, RequestResult as ProverRequest, SpecResult as ProverSpec, WitnessResult}, FAULT_PROOF_ELF,
+    types::{ProofResult, RequestResult as ProverRequest, SpecResult as ProverSpec, WitnessResult},
+    FAULT_PROOF_ELF,
 };
 use std::time::Duration;
 
@@ -30,22 +31,20 @@ impl TestClient {
 
 impl Default for TestClient {
     fn default() -> Self {
-        let prover_client = HttpClientBuilder::default()
-            .max_request_body_size(300 * 1024 * 1024)
-            .request_timeout(Duration::from_secs(CLIENT_TIMEOUT_SEC))
-            .build(DEFAULT_PROVER_RPC_ENDPOINT)
-            .unwrap();
-
-        Self { prover_client }
+        Self::new(DEFAULT_PROVER_RPC_ENDPOINT)
     }
 }
 
 impl TestClient {
-    pub async fn prover_spec(&self) -> ProverSpec {
+    pub async fn prover_spec(&self) -> Result<ProverSpec> {
         let params = rpc_params![];
-        self.prover_client.request("spec", params).await.unwrap()
+        self.prover_client
+            .request::<ProverSpec, _>("spec", params)
+            .await
+            .map_err(|e| anyhow::anyhow!("the server is not ready: {:?}", e))
     }
 
+    #[allow(dead_code)]
     pub async fn execute_witness(&self, witness_result: &WitnessResult) -> bool {
         let prover = sp1_sdk::ProverClient::from_env();
         let mut sp1_stdin = sp1_sdk::SP1Stdin::new();

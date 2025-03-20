@@ -1,5 +1,5 @@
 [workspace]
-members = ["prover-proxy", "integration-tests", "script"]
+members = ["prover-proxy", "script"]
 resolver = "2"
 
 [workspace.package]

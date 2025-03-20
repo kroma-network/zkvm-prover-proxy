@@ -23,3 +23,5 @@ Cargo.lock
 .env
 
 data/
+
+prover-proxy/tests/data/proof.json

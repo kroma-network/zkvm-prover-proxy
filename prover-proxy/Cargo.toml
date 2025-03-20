@@ -40,3 +40,7 @@ jsonrpsee.workspace = true
 
 # kroma
 kroma-zkvm-common.workspace = true
+
+[dev-dependencies]
+cargo_metadata = "0.18.1"
+sysinfo = "0.32.0"
