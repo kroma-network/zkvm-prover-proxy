@@ -43,4 +43,4 @@ jobs:
           context: .
           file: docker/Dockerfile.proverproxy.ubuntu
           push: true
-          tags: kromanetwork/zkvm-prover-proxy:${{ needs.prepare.outputs.docker-tag }}
+          tags: kromanetwork/zkvm-prover-proxy:${{ needs.prepare.outputs.docker-tag }},kromanetwork/zkvm-prover-proxy:latest
