@@ -18,6 +18,6 @@ target/
 
 .env
 
-data/
+/data
 
 prover-proxy/tests/data/proof.json
