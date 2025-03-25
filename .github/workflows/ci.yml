@@ -1,0 +1,31 @@
+name: Cargo Tests
+
+on:
+  pull_request:
+    branches:
+      - main
+  push:
+    branches:
+      - main
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Set up Rust
+        uses: actions-rs/toolchain@v1
+        with:
+          toolchain: 1.81.0
+
+      - name: Install nextest
+        run: curl -LsSf https://get.nexte.st/latest/linux | tar zxf - -C ${CARGO_HOME:-~/.cargo}/bin
+
+      - uses: Swatinem/rust-cache@v2
+
+      - name: Test
+        run: cargo nextest run --release --workspace --all --all-features --no-capture
+        env:
+          SP1_PRIVATE_KEY: ${{ secrets.SP1_PRIVATE_KEY }}
